@@ -1,0 +1,29 @@
+﻿Program.Sub.Preflight.Start
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+'This will run on a task scheduler every hour to run these updates
+f.Intrinsic.Control.Try
+	'Open connection
+	f.ODBC.Connection!con.opencompanyconnection(600)
+	
+	'Update config_mfg
+	f.ODBC.Connection!con.Execute("update config_mfg set category='P' where source in ('F');")
+	
+	'Update BOM_MSTR
+	f.ODBC.Connection!con.Execute("update BOM_MSTR set category='P' where source in ('F');")
+f.Intrinsic.Control.Catch
+	'Do nothing
+f.Intrinsic.Control.Finally
+	'Closes ODBC connection, default to connection : "con"
+	f.Intrinsic.Control.If(v.ODBC!con.State, =, 1)
+		f.ODBC.Connection!con.Close
+	f.Intrinsic.Control.EndIf
+f.Intrinsic.Control.EndTry
+
+Program.Sub.Main.End
+
+Program.Sub.Comments.Start
+${$5$}$3.0.0.0$}$1
+${$6$}$dduncan$}$20210610162132335$}$r0o+00bj735YsiGsQ60YIo/Zb+26OZQG1NdsjKAOXgLiZydZfqdn5PZ9C4pQHKisIRhPSzx/VYI=
+Program.Sub.Comments.End
